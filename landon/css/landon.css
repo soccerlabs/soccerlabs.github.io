@@ -29,19 +29,28 @@ div.tooltip {
 
 
 .USA.day{fill:rgb(255, 217, 217)}
+.USAlegend{background-color:rgb(255, 217, 217)}
 
 .LosAngeles.day{fill:rgb(250, 250, 212)}
+.LosAngeles_l{background-color:rgb(250, 250, 212)}
 
 .SanJose.day{fill:rgb(208, 231, 245)}
+.SanJose_l{background-color:rgb(208, 231, 245)}
 
 .Everton.day{fill:rgb(175, 175, 250)}
+.Everton_l{background-color:rgb(175, 175, 250)}
 
 .MLSAll-Star.day{fill:rgb(178, 255, 184)}
+.MLSAll-Star_l{background-color:rgb(178, 255, 184)}
 
 .LeverkusenII.day { fill: rgb(217, 217, 217);}
+.LeverkusenII_l { background-color: rgb(217, 217, 217);}
+
 .Leverkusen.day { fill: rgb(217, 217, 217);}
+.Leverkusen_l { background-color: rgb(217, 217, 217);}
 
 .Bayern.day { fill: rgb(255, 239, 217); }
+.Bayern_l { background-color: rgb(255, 239, 217); }
 
 .bar rect {
   fill: steelblue;
