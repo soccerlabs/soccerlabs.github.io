@@ -105,8 +105,8 @@ d3.csv("LandonGoals.csv", function(error, csvData) {
     appHist.push(d3.time.weekOfYear(new Date(d.Date+ ' 12:00:00 GMT-0500 (EST)')));
   });
 
-  displayGoalDist(histData);
-  displayGoalDist(appHist);
+  displayGoalDist(histData, 'Goals');
+  displayGoalDist(appHist, 'Appearances');
 });
 
 function monthPath(t0) {
@@ -122,7 +122,7 @@ function monthPath(t0) {
 
 d3.select('body').style("height", "2910px");
 
-function displayGoalDist(weekData) {
+function displayGoalDist(weekData, label) {
 
 // A formatter for counts.
 var formatCount = d3.format(",.0f");
@@ -135,7 +135,6 @@ var x = d3.scale.linear()
     .domain([0, 53])
     .range([0, width]);
 
-// Generate a histogram using twenty uniformly-spaced bins.
 var data = d3.layout.histogram()
     .bins(x.ticks(54))
     (weekData);
@@ -150,11 +149,20 @@ var xAxis = d3.svg.axis()
     .tickFormat(function (d) { return d+1; })
     .orient("bottom");
 
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-8, 0])
+  .html(function (d) {
+    return d.y + ' ' + label + ' in Week ' + (d.x+1);
+  });
+
 var svg = d3.select("#container").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.call(tip);
 
 var bar = svg.selectAll(".bar")
     .data(data)
@@ -165,13 +173,17 @@ var bar = svg.selectAll(".bar")
 bar.append("rect")
     .attr("x", 1)
     .attr("width", x(data[0].dx) - 1)
-    .attr("height", function(d) { return height - y(d.y); });
+    .attr("height", function(d) { return height - y(d.y); })
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide)
+    ;
 
 bar.append("text")
     .attr("dy", ".75em")
     .attr("y", 3)
     .attr("x", x(data[0].dx) / 2)
     .attr("text-anchor", "middle")
+    .attr('class', 'bar-label')
     .text(function(d) { return formatCount(d.y); });
 
 svg.append("g")

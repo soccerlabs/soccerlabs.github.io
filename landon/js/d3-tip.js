@@ -262,9 +262,8 @@
           height     = tbbox.height,
           x          = tbbox.x,
           y          = tbbox.y,
-          scrollEl   = document.documentElement? document.documentElement : document.body,
-          scrollTop  = scrollEl.scrollTop,
-          scrollLeft = scrollEl.scrollLeft
+          scrollTop  = $('body').scrollTop(),
+          scrollLeft = $('body').scrollLeft()
   
   
       point.x = x + scrollLeft

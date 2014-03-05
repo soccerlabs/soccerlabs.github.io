@@ -102,3 +102,6 @@ div.tooltip {
   left: 0;
 }
 
+.bar-label {
+  pointer-events: none;
+}
