@@ -27,46 +27,34 @@ div.tooltip {
   pointer-events: none;         
 }
 
-.q0-11{fill:rgb(217, 217, 217)}
-.q1-11{fill:rgb(150, 150, 150)}
-.q2-11{fill:rgb(100, 100, 100)}
-.q3-11{fill:rgb(50, 50, 50)}
-.q4-11{fill:rgb(0, 0, 0)}
+#legend {
+  width: 150px;
+  padding: 5px;
+}
 
 .USA.day{fill:rgb(255, 217, 217)}
-.USA.q1-11{fill:rgb(250, 0, 0)}
-.USA.q2-11{fill:rgb(150, 0, 0)}
-.USA.q3-11{fill:rgb(100, 0, 0)}
-.USA.q4-11{fill:rgb(50, 0, 0)}
+.USA_l{background-color:rgb(255, 217, 217)}
 
 .LosAngeles.day{fill:rgb(250, 250, 212)}
-.LosAngeles.q1-11{fill:rgb(250, 250, 0)}
-.LosAngeles.q2-11{fill:rgb(150, 150, 0)}
-.LosAngeles.q3-11{fill:rgb(100, 100, 0)}
-.LosAngeles.q4-11{fill:rgb(50, 50, 0)}
+.LosAngeles_l{background-color:rgb(250, 250, 212)}
 
 .SanJose.day{fill:rgb(208, 231, 245)}
-.SanJose.q1-11{fill:rgb(0, 155, 245)}
-.SanJose.q2-11{fill:rgb(0, 90, 143)}
-.SanJose.q3-11{fill:rgb(0, 58, 92)}
-.SanJose.q4-11{fill:rgb(0, 26, 41)}
+.SanJose_l{background-color:rgb(208, 231, 245)}
 
 .Everton.day{fill:rgb(175, 175, 250)}
-.Everton.q1-11{fill:rgb(0, 0, 250)}
-.Everton.q2-11{fill:rgb(0, 0, 150)}
-.Everton.q3-11{fill:rgb(0, 0, 100)}
-.Everton.q4-11{fill:rgb(0, 0, 50)}
+.Everton_l{background-color:rgb(175, 175, 250)}
 
 .MLSAll-Star.day{fill:rgb(178, 255, 184)}
-.MLSAll-Star.q1-11{fill:rgb(0, 255, 17)}
-.MLSAll-Star.q2-11{fill:rgb(0, 204, 14)}
-.MLSAll-Star.q3-11{fill:rgb(0, 153, 10)}
-.MLSAll-Star.q4-11{fill:rgb(0, 102, 7)}
+.MLSAll-Star_l{background-color:rgb(178, 255, 184)}
 
 .LeverkusenII.day { fill: rgb(217, 217, 217);}
+.LeverkusenII_l { background-color: rgb(217, 217, 217);}
+
 .Leverkusen.day { fill: rgb(217, 217, 217);}
+.Leverkusen_l { background-color: rgb(217, 217, 217);}
 
 .Bayern.day { fill: rgb(255, 239, 217); }
+.Bayern_l { background-color: rgb(255, 239, 217); }
 
 .bar rect {
   fill: steelblue;
