@@ -1,71 +1,3 @@
-d3.helper = {};
-
-d3.helper.tooltip = function(){
-    var tooltipDiv;
-    var bodyNode = d3.select('body').node();
-    var attrs = {};
-    var text = '';
-    var styles = {};
-
-    function tooltip(selection){
-
-        selection.on('mouseover.tooltip', function(pD, pI){
-            var name, value;
-            // Clean up lost tooltips
-            d3.select('body').selectAll('div.tooltip').remove();
-            // Append tooltip
-            tooltipDiv = d3.select('body').append('div');
-            tooltipDiv.attr(attrs);
-            tooltipDiv.style(styles);
-            var absoluteMousePos = d3.mouse(bodyNode);
-            tooltipDiv.style({
-                left: (absoluteMousePos[0] + 10)+'px',
-                top: (absoluteMousePos[1] - 15)+'px',
-                position: 'absolute',
-                'z-index': 1001
-            });
-            // Add text using the accessor function, Crop text arbitrarily
-            tooltipDiv.style('width', function(d, i){ return (text(pD, pI).length > 80) ? '300px' : null; })
-                .html(function(d, i){return text(pD, pI);});
-        })
-        .on('mousemove.tooltip', function(pD, pI){
-            // Move tooltip
-            var absoluteMousePos = d3.mouse(bodyNode);
-            tooltipDiv.style({
-                left: (absoluteMousePos[0] + 10)+'px',
-                top: (absoluteMousePos[1] - 15)+'px'
-            });
-            // Keep updating the text, it could change according to position
-            tooltipDiv.html(function(d, i){ return text(pD, pI); });
-        })
-        .on('mouseout.tooltip', function(pD, pI){
-            // Remove tooltip
-            tooltipDiv.remove();
-        });
-
-    }
-
-    tooltip.attr = function(_x){
-        if (!arguments.length) return attrs;
-        attrs = _x;
-        return this;
-    };
-
-    tooltip.style = function(_x){
-        if (!arguments.length) return styles;
-        styles = _x;
-        return this;
-    };
-
-    tooltip.text = function(_x){
-        if (!arguments.length) return text;
-        text = d3.functor(_x);
-        return this;
-    };
-
-    return tooltip;
-};
-
 var yearWidth = 730,
     yearHeight = 95,
     cellSize = 13; // cell size
@@ -80,8 +12,6 @@ var color = function(d) {
   return d.Team.replace(' ', '');
 };
 
-
-
 d3.csv("LandonGoals.csv", function(error, csvData) {
   var data = d3.nest()
     .key(function(d) { 
@@ -95,6 +25,18 @@ d3.csv("LandonGoals.csv", function(error, csvData) {
   csvData.forEach(function (d) { 
     dataMap[d.Date] = d; 
   });
+
+  var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-8, 0])
+    .html(function (d) {
+      if (!dataMap[d]) return '';
+      return d + "<br/>" + 
+        dataMap[d].Team + " vs. " + dataMap[d].Opponent + "<br/>" +
+        dataMap[d].Competition + "<br/>" + 
+        dataMap[d].Result + "<br/>" + 
+        data[d] + (data[d] === 1 ? ' goal' : ' goals');
+    });
 
   var svg = d3.select("#container").style('max-width', yearWidth +'px')
       .selectAll("svg")
@@ -111,6 +53,8 @@ d3.csv("LandonGoals.csv", function(error, csvData) {
       .style("text-anchor", "middle")
       .text(function(d) { return d; });
 
+  svg.call(tip);
+
   var rect = svg.selectAll(".day")
       .data(function(d) { return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
     .enter().append("svg")
@@ -121,62 +65,30 @@ d3.csv("LandonGoals.csv", function(error, csvData) {
       .datum(format);
 
   var dayrect = rect.append('rect')
-    .attr('class', 'day')
     .attr('width', cellSize)
     .attr('height', cellSize)
-    .call(d3.helper.tooltip()
-                .attr({class: function(d, i) { return d + ' ' +  i + ' A'; }})
-                .style({color: 'blue'})
-                .text(function(d, i){ 
-                  if (!dataMap[d]) return '';
-                  return d + "<br/>" + 
-                    dataMap[d].Team + " vs. " + dataMap[d].Opponent + "<br/>" +
-                    dataMap[d].Competition + "<br/>" + 
-                    dataMap[d].Result + "<br/>" + 
-                    data[d] + (data[d] === 1 ? ' goal' : ' goals');
-                })
-            )
-      .attr('class', function(d) { 
-        return "day " + color(dataMap[d]); 
-      });
-      
-
+    .attr('class', function(d) { 
+      return "day " + color(dataMap[d]); 
+    });
+    
+  rect.filter(function(d) { return d in data; })
+      .on('mouseover', function (d) { tip.show(d, this); })
+      .on('mouseout', tip.hide)
+      .selectAll('rect')
+      .data(function (d) { return _.range(-1, dataMap[d].Goals); })
+    .enter().append('rect')
+      .attr('width', 4)
+      .attr('height', 4)
+      .attr('x', function (d) { return ((d % 2) * 5)+2; })
+      .attr('y', function (d) { return (Math.floor(d / 2) * 5)+2; })
+      .attr('class', 'q4-11')
+      ;
 
   svg.selectAll(".month")
       .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
     .enter().append("path")
       .attr("class", "month")
       .attr("d", monthPath);
-
-  // rect.filter(function(d) { return d in data; })
-  //     .selectAll('rect')
-  //       .attr('class', function(d) { 
-  //         return "day " + color(dataMap[d]); 
-  //       })
-  //       .call(d3.helper.tooltip()
-  //               .attr({class: function(d, i) { return d + ' ' +  i + ' A'; }})
-  //               .style({color: 'blue'})
-  //               .text(function(d, i){ 
-  //                 return d + "<br/>" + 
-  //                   dataMap[d].Team + " vs. " + dataMap[d].Opponent + "<br/>" +
-  //                   dataMap[d].Competition + "<br/>" + 
-  //                   dataMap[d].Result + "<br/>" + 
-  //                   data[d] + (data[d] === 1 ? ' goal' : ' goals');
-  //               })
-  //           );
-  
-  dayrect
-  //.filter(function(d) { return d in data; })
-      .selectAll('rect')
-      .data(function (d) { return d in data ? _.range(-1, dataMap[d].Goals) : []; })
-      .enter().append('rect')
-        .attr('width', 4)
-        .attr('height', 4)
-        .attr('x', function (d) { return ((d % 2) * 5)+2; })
-        .attr('y', function (d) { return (Math.floor(d / 2) * 5)+2; })
-        .attr('class', 'q4-11');
-
-    
 
   var weekData = d3.nest()
     .key(function (d) { return d3.time.weekOfYear(new Date(d.Date + ' 12:00:00 GMT-0500 (EST)')); })
