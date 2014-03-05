@@ -82,7 +82,7 @@ var color = function(d) {
 
 
 
-d3.csv("landon/LandonGoals.csv", function(error, csvData) {
+d3.csv("LandonGoals.csv", function(error, csvData) {
   var data = d3.nest()
     .key(function(d) { 
       return d.Date; 
@@ -120,7 +120,7 @@ d3.csv("landon/LandonGoals.csv", function(error, csvData) {
       .attr("height", cellSize)
       .datum(format);
 
-  rect.append('rect')
+  var dayrect = rect.append('rect')
     .attr('class', 'day')
     .attr('width', cellSize)
     .attr('height', cellSize)
@@ -165,7 +165,7 @@ d3.csv("landon/LandonGoals.csv", function(error, csvData) {
   //               })
   //           );
   
-  rect
+  dayrect
   //.filter(function(d) { return d in data; })
       .selectAll('rect')
       .data(function (d) { return d in data ? _.range(-1, dataMap[d].Goals) : []; })
