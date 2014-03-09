@@ -40,7 +40,7 @@ d3.csv("LandonGoals.csv", function(error, csvData) {
 
   var svg = d3.select("#container").style('max-width', yearWidth +'px')
       .selectAll("svg")
-      .data(d3.range(1999, 2014))
+      .data(d3.range(1999, 2015))
     .enter().append("svg")
       .attr("width", yearWidth)
       .attr("height", yearHeight)
